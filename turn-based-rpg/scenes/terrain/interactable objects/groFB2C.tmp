@@ -1,18 +1,35 @@
-[gd_scene load_steps=6 format=3 uid="uid://7ul0iv2i6avp"]
+[gd_scene load_steps=7 format=3 uid="uid://7ul0iv2i6avp"]
 
 [ext_resource type="Texture2D" uid="uid://cj03i575kokn2" path="res://assets/sprites/objects/objects.png" id="1_8dqwu"]
-[ext_resource type="Script" path="res://scripts/ground-sign.gd" id="1_j54ti"]
+[ext_resource type="Script" path="res://scripts/terrain/interactable objects/AreaProperties.gd" id="2_d1gu6"]
 [ext_resource type="FontFile" uid="uid://dd84223j8j8ph" path="res://assets/fonts/BitPotion.ttf" id="3_ardtp"]
+
+[sub_resource type="GDScript" id="GDScript_at6to"]
+script/source = "extends StaticBody2D
+
+@onready var label = $Label
+
+func _ready():
+	label.text = \"\"
+
+func _on_area_2d_body_entered(body):
+	label.text = \"F TO INTERACT\"
+	
+
+
+func _on_area_2d_body_exited(body):
+	label.text = \"\"
+"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_brx51"]
 size = Vector2(14, 2.5)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_d6imy"]
-radius = 12.0
+radius = 5.0
 
 [node name="Sign" type="StaticBody2D"]
 collision_mask = 2
-script = ExtResource("1_j54ti")
+script = SubResource("GDScript_at6to")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("1_8dqwu")
@@ -24,12 +41,15 @@ position = Vector2(0, 1.25)
 shape = SubResource("RectangleShape2D_brx51")
 
 [node name="Area2D" type="Area2D" parent="."]
+collision_layer = 2
 collision_mask = 2
+script = ExtResource("2_d1gu6")
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="Area2D"]
 shape = SubResource("CircleShape2D_d6imy")
 
 [node name="Label" type="Label" parent="."]
+visible = false
 offset_left = -31.0
 offset_top = -21.0
 offset_right = 41.0

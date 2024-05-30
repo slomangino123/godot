@@ -7,7 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://dl8kdcpoa1kdo" path="res://assets/sprites/tilesets/decor_16x16.png" id="6_42xlg"]
 [ext_resource type="Texture2D" uid="uid://cj03i575kokn2" path="res://assets/sprites/objects/objects.png" id="7_hacgs"]
 [ext_resource type="PackedScene" uid="uid://0occwkmioh7n" path="res://scenes/terrain/skinny-tree.tscn" id="8_exe68"]
-[ext_resource type="PackedScene" uid="uid://7ul0iv2i6avp" path="res://scripts/ground-sign.tscn" id="9_yjxiu"]
+[ext_resource type="PackedScene" uid="uid://b4vsdiirkikwp" path="res://scenes/terrain/interactable objects/GroundSign_v2.tscn" id="9_tw7m1"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_aroj4"]
 texture = ExtResource("3_jgwhc")
@@ -3262,6 +3262,6 @@ position_smoothing_enabled = true
 [node name="StaticBody2D" parent="." instance=ExtResource("8_exe68")]
 position = Vector2(200, 71)
 
-[node name="sign_1" parent="." instance=ExtResource("9_yjxiu")]
-y_sort_enabled = true
-position = Vector2(148, 127)
+[node name="GroundSign2" parent="." instance=ExtResource("9_tw7m1")]
+position = Vector2(229, 126)
+interact_value = Array[String](["Welcome to Sandara!", "Find the skeleton."])

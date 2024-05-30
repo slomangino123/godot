@@ -1,0 +1,32 @@
+[gd_scene load_steps=5 format=3 uid="uid://b4vsdiirkikwp"]
+
+[ext_resource type="Texture2D" uid="uid://cj03i575kokn2" path="res://assets/sprites/objects/objects.png" id="1_4r2t8"]
+[ext_resource type="Script" path="res://scripts/terrain/interactable objects/AreaProperties.gd" id="1_bixqf"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_0joir"]
+radius = 4.03113
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_a63fo"]
+size = Vector2(14, 3)
+
+[node name="GroundSign" type="Area2D"]
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("1_bixqf")
+interact_label = "F TO INTERACT"
+interact_type = "display_text"
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_4r2t8")
+region_enabled = true
+region_rect = Rect2(0, 0, 16, 16)
+
+[node name="InteractionShape" type="CollisionShape2D" parent="."]
+position = Vector2(0, 0.5)
+shape = SubResource("CircleShape2D_0joir")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(0, 1)
+shape = SubResource("RectangleShape2D_a63fo")
