@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="turn-based-rpg"
+config/name="top-down-rpg"
 run/main_scene="res://scenes/game.tscn"
 config/features=PackedStringArray("4.2", "Forward Plus")
 config/icon="res://icon.svg"
@@ -69,6 +69,10 @@ d_key={
 "deadzone": 0.5,
 "events": []
 }
+
+[layer_names]
+
+2d_physics/layer_2="interactions"
 
 [rendering]
 
