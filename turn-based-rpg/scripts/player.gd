@@ -1,5 +1,7 @@
 extends CharacterBody2D
 
+@onready var stateMachine = $StateMachine
+
 func _physics_process(delta):
 	handleMovement()
 	handleInteraction()
@@ -7,38 +9,14 @@ func _physics_process(delta):
 #################### Movement ####################
 @onready var animated_sprite = $AnimatedSprite2D
 const SPEED = 120.0
+@onready var attacking = false
 
 func handleMovement():
-	var direction = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down").normalized()
-
-	velocity = direction * SPEED
+	if attacking:
+		return
 	
-	# right x positive
-	# left x negative
-	# up y negative
-	# down y positive
-# RIGHT
-	if Input.is_action_pressed("ui_right"):
-		animated_sprite.flip_h = false
-		animated_sprite.play("run-right")
-	elif Input.is_action_just_released("ui_right"):
-		animated_sprite.play("idle-side")
-# LEFT
-	elif Input.is_action_pressed("ui_left"):
-		animated_sprite.flip_h = true
-		animated_sprite.play("run-right")
-	elif Input.is_action_just_released("ui_left"):
-		animated_sprite.play("idle-side")
-# DOWN
-	elif Input.is_action_pressed("ui_up"):
-		animated_sprite.play("run-up")
-	elif Input.is_action_just_released("ui_up"):
-		animated_sprite.play("idle-rear")
-# UP
-	elif Input.is_action_pressed("ui_down"):
-		animated_sprite.play("run-down")
-	elif Input.is_action_just_released("ui_down"):
-		animated_sprite.play("idle")
+	var direction = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down").normalized()
+	velocity = direction * SPEED
 	move_and_slide()
 	
 	
@@ -64,17 +42,21 @@ func update_interactions():
 		interactLabel.text = ""
 	
 func interact():
+		
 	if interactions:
 		var currentInteraction = interactions[0]
 		match currentInteraction.interact_type:
 			"display_text":
 				DialogManager.startDialog(global_position, currentInteraction.interact_value)
 
-func handleInteraction():
+func handleInteraction():		
 	if Input.is_action_just_pressed("interact"):
 		interacting = true
 		interactLabel.text = ""
 		interact()
 	else:
 		interacting = false
-	
+
+
+func _on_attack_state_attacking(isAttacking: bool):
+	attacking = isAttacking

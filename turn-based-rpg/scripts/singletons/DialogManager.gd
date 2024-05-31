@@ -1,7 +1,7 @@
 extends Node
 
 
-@onready var textBoxScene = preload("res://scenes/DialogBox.tscn")
+@onready var dialogBoxScene = preload("res://scenes/DialogBox.tscn")
 
 var dialogLines: Array[String] = []
 
@@ -24,7 +24,7 @@ func startDialog(position: Vector2, lines: Array[String]):
 	isDialogActive = true
 	
 func showTextBox():
-	textBox = textBoxScene.instantiate()
+	textBox = dialogBoxScene.instantiate()
 	textBox.finished_displaying.connect(onTextBoxFinishedDisplaying)
 	get_tree().root.add_child(textBox)
 	textBox.global_position = textBoxPosition
@@ -53,8 +53,3 @@ func _unhandled_input(event):
 				return
 			
 			showTextBox()
-			
-			
-		
-	
-

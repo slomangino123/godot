@@ -50,9 +50,5 @@ func displayLetter():
 		_:
 			timer.start(letter_time)
 		
-		
-	
-
-
 func _on_letter_display_timer_timeout():
 	displayLetter()

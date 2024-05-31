@@ -1,4 +1,4 @@
-[gd_scene load_steps=65 format=3 uid="uid://c2yejpt47uj8s"]
+[gd_scene load_steps=59 format=3 uid="uid://c2yejpt47uj8s"]
 
 [ext_resource type="Texture2D" uid="uid://dm2eqs6perh3c" path="res://assets/sprites/characters/player.png" id="1_36r7b"]
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_x0kv0"]
@@ -7,12 +7,6 @@
 [ext_resource type="Script" path="res://scripts/state/player/PlayerIdleDownState.gd" id="5_rcg12"]
 [ext_resource type="Script" path="res://scripts/state/player/PlayerIdleRightState.gd" id="6_q24oa"]
 [ext_resource type="Script" path="res://scripts/state/player/PlayerIdleLeftState.gd" id="7_7diu7"]
-[ext_resource type="Script" path="res://scripts/state/player/PlayerIdleUpState.gd" id="8_of41s"]
-[ext_resource type="Script" path="res://scripts/state/player/RunUpState.gd" id="9_2i3ei"]
-[ext_resource type="Script" path="res://scripts/state/player/RunDownState.gd" id="10_s83fo"]
-[ext_resource type="Script" path="res://scripts/state/player/RunLeftState.gd" id="11_d24va"]
-[ext_resource type="Script" path="res://scripts/state/player/RunRightState.gd" id="12_g1ve7"]
-[ext_resource type="Script" path="res://scripts/state/player/AttackState.gd" id="13_8ktfa"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_k4gcs"]
 atlas = ExtResource("1_36r7b")
@@ -412,8 +406,10 @@ script = ExtResource("1_x0kv0")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(0, -17)
 sprite_frames = SubResource("SpriteFrames_5f60y")
-animation = &"run-down"
+animation = &"attack-up"
 autoplay = "idle"
+frame = 3
+frame_progress = 1.0
 offset = Vector2(0, -10)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -456,25 +452,6 @@ script = ExtResource("6_q24oa")
 [node name="PlayerIdleLeftState" type="Node" parent="StateMachine"]
 script = ExtResource("7_7diu7")
 
-[node name="PlayerIdleUpState" type="Node" parent="StateMachine"]
-script = ExtResource("8_of41s")
-
-[node name="RunUpState" type="Node" parent="StateMachine"]
-script = ExtResource("9_2i3ei")
-
-[node name="RunDownState" type="Node" parent="StateMachine"]
-script = ExtResource("10_s83fo")
-
-[node name="RunLeftState" type="Node" parent="StateMachine"]
-script = ExtResource("11_d24va")
-
-[node name="RunRightState" type="Node" parent="StateMachine"]
-script = ExtResource("12_g1ve7")
-
-[node name="AttackState" type="Node" parent="StateMachine"]
-script = ExtResource("13_8ktfa")
-
-[connection signal="animation_finished" from="AnimatedSprite2D" to="StateMachine/AttackState" method="_on_animated_sprite_2d_animation_finished"]
+[connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]
 [connection signal="area_entered" from="interaction-components/interaction-area" to="." method="_on_interactionarea_area_entered"]
 [connection signal="area_exited" from="interaction-components/interaction-area" to="." method="_on_interactionarea_area_exited"]
-[connection signal="Attacking" from="StateMachine/AttackState" to="." method="_on_attack_state_attacking"]
