@@ -1,5 +1,6 @@
 extends Node
 
+signal DialogFinished
 
 @onready var dialogBoxScene = preload("res://scenes/DialogBox.tscn")
 
@@ -16,7 +17,7 @@ var canAdvanceLine = false
 func startDialog(position: Vector2, lines: Array[String]):
 	if isDialogActive:
 		return
-		
+	
 	dialogLines = lines
 	textBoxPosition = position
 	showTextBox()
@@ -25,7 +26,7 @@ func startDialog(position: Vector2, lines: Array[String]):
 	
 func showTextBox():
 	textBox = dialogBoxScene.instantiate()
-	textBox.finished_displaying.connect(onTextBoxFinishedDisplaying)
+	textBox.FinishedDisplayingLine.connect(onTextBoxFinishedDisplaying)
 	get_tree().root.add_child(textBox)
 	textBox.global_position = textBoxPosition
 	textBox.displayText(dialogLines[currentLineIndex])
@@ -50,6 +51,7 @@ func _unhandled_input(event):
 			if currentLineIndex >= dialogLines.size():
 				isDialogActive = false
 				currentLineIndex = 0
+				DialogFinished.emit()
 				return
 			
 			showTextBox()

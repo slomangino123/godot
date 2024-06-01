@@ -1,4 +1,4 @@
-[gd_scene load_steps=65 format=3 uid="uid://c2yejpt47uj8s"]
+[gd_scene load_steps=67 format=3 uid="uid://c2yejpt47uj8s"]
 
 [ext_resource type="Texture2D" uid="uid://dm2eqs6perh3c" path="res://assets/sprites/characters/player.png" id="1_36r7b"]
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_x0kv0"]
@@ -13,6 +13,8 @@
 [ext_resource type="Script" path="res://scripts/state/player/RunLeftState.gd" id="11_d24va"]
 [ext_resource type="Script" path="res://scripts/state/player/RunRightState.gd" id="12_g1ve7"]
 [ext_resource type="Script" path="res://scripts/state/player/AttackState.gd" id="13_8ktfa"]
+[ext_resource type="Script" path="res://scripts/state/player/Interaction/InteractingState.gd" id="14_wnfjt"]
+[ext_resource type="Script" path="res://scripts/state/player/Interaction/NotInteractingState.gd" id="15_4jp1f"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_k4gcs"]
 atlas = ExtResource("1_36r7b")
@@ -209,7 +211,7 @@ region = Rect2(240, 240, 48, 48)
 [sub_resource type="SpriteFrames" id="SpriteFrames_5f60y"]
 animations = [{
 "frames": [{
-"duration": 1.0,
+"duration": 0.3,
 "texture": SubResource("AtlasTexture_k4gcs")
 }, {
 "duration": 1.0,
@@ -226,7 +228,7 @@ animations = [{
 "speed": 12.0
 }, {
 "frames": [{
-"duration": 1.0,
+"duration": 0.3,
 "texture": SubResource("AtlasTexture_vr2tw")
 }, {
 "duration": 1.0,
@@ -243,7 +245,7 @@ animations = [{
 "speed": 12.0
 }, {
 "frames": [{
-"duration": 1.0,
+"duration": 0.3,
 "texture": SubResource("AtlasTexture_bpdsh")
 }, {
 "duration": 1.0,
@@ -412,7 +414,7 @@ script = ExtResource("1_x0kv0")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(0, -17)
 sprite_frames = SubResource("SpriteFrames_5f60y")
-animation = &"run-down"
+animation = &"attack-down"
 autoplay = "idle"
 offset = Vector2(0, -10)
 
@@ -421,19 +423,21 @@ visible = false
 position = Vector2(0, -15)
 shape = SubResource("CircleShape2D_h5xgl")
 
-[node name="interaction-components" type="Node2D" parent="."]
+[node name="InteractionManager" type="Node2D" parent="."]
 z_index = 1
 
-[node name="interaction-area" type="Area2D" parent="interaction-components"]
+[node name="InteractionTimer" type="Timer" parent="InteractionManager"]
+
+[node name="interaction-area" type="Area2D" parent="InteractionManager"]
 collision_mask = 2
 monitorable = false
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="interaction-components/interaction-area"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionManager/interaction-area"]
 visible = false
 position = Vector2(0, -14)
 shape = SubResource("CircleShape2D_u46r4")
 
-[node name="InteractionLabel" type="Label" parent="interaction-components"]
+[node name="InteractionLabel" type="Label" parent="InteractionManager"]
 offset_left = -36.0
 offset_top = -44.0
 offset_right = 35.0
@@ -443,38 +447,49 @@ theme_override_font_sizes/font_size = 16
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("initialState")]
+[node name="AnimationStateMachine" type="Node" parent="." node_paths=PackedStringArray("initialState")]
 script = ExtResource("4_e2iyy")
 initialState = NodePath("PlayerIdleDownState")
 
-[node name="PlayerIdleDownState" type="Node" parent="StateMachine"]
+[node name="PlayerIdleDownState" type="Node" parent="AnimationStateMachine"]
 script = ExtResource("5_rcg12")
 
-[node name="PlayerIdleRightState" type="Node" parent="StateMachine"]
+[node name="PlayerIdleRightState" type="Node" parent="AnimationStateMachine"]
 script = ExtResource("6_q24oa")
 
-[node name="PlayerIdleLeftState" type="Node" parent="StateMachine"]
+[node name="PlayerIdleLeftState" type="Node" parent="AnimationStateMachine"]
 script = ExtResource("7_7diu7")
 
-[node name="PlayerIdleUpState" type="Node" parent="StateMachine"]
+[node name="PlayerIdleUpState" type="Node" parent="AnimationStateMachine"]
 script = ExtResource("8_of41s")
 
-[node name="RunUpState" type="Node" parent="StateMachine"]
+[node name="RunUpState" type="Node" parent="AnimationStateMachine"]
 script = ExtResource("9_2i3ei")
 
-[node name="RunDownState" type="Node" parent="StateMachine"]
+[node name="RunDownState" type="Node" parent="AnimationStateMachine"]
 script = ExtResource("10_s83fo")
 
-[node name="RunLeftState" type="Node" parent="StateMachine"]
+[node name="RunLeftState" type="Node" parent="AnimationStateMachine"]
 script = ExtResource("11_d24va")
 
-[node name="RunRightState" type="Node" parent="StateMachine"]
+[node name="RunRightState" type="Node" parent="AnimationStateMachine"]
 script = ExtResource("12_g1ve7")
 
-[node name="AttackState" type="Node" parent="StateMachine"]
+[node name="AttackState" type="Node" parent="AnimationStateMachine"]
 script = ExtResource("13_8ktfa")
 
-[connection signal="animation_finished" from="AnimatedSprite2D" to="StateMachine/AttackState" method="_on_animated_sprite_2d_animation_finished"]
-[connection signal="area_entered" from="interaction-components/interaction-area" to="." method="_on_interactionarea_area_entered"]
-[connection signal="area_exited" from="interaction-components/interaction-area" to="." method="_on_interactionarea_area_exited"]
-[connection signal="Attacking" from="StateMachine/AttackState" to="." method="_on_attack_state_attacking"]
+[node name="InteractionStateMachine" type="Node" parent="." node_paths=PackedStringArray("initialState")]
+script = ExtResource("4_e2iyy")
+initialState = NodePath("NotInteractingState")
+
+[node name="InteractingState" type="Node" parent="InteractionStateMachine"]
+script = ExtResource("14_wnfjt")
+
+[node name="NotInteractingState" type="Node" parent="InteractionStateMachine"]
+script = ExtResource("15_4jp1f")
+
+[connection signal="animation_finished" from="AnimatedSprite2D" to="AnimationStateMachine/AttackState" method="_on_animated_sprite_2d_animation_finished"]
+[connection signal="timeout" from="InteractionManager/InteractionTimer" to="." method="_on_interaction_timer_timeout"]
+[connection signal="area_entered" from="InteractionManager/interaction-area" to="." method="_on_interactionarea_area_entered"]
+[connection signal="area_exited" from="InteractionManager/interaction-area" to="." method="_on_interactionarea_area_exited"]
+[connection signal="Attacking" from="AnimationStateMachine/AttackState" to="." method="_on_attack_state_attacking"]

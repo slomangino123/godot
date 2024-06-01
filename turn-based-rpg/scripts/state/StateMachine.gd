@@ -37,9 +37,9 @@ func onChildTransition(state: State, newStateName: String):
 		
 	if currentState:
 		currentState.Exit()
-		print(currentState.name + " exited")
+		#print(currentState.name + " exited")
 		
 	newState.Enter(currentState)
 	currentState = newState
 	
-	print(currentState.name + " entered")
+	#print(currentState.name + " entered")

@@ -12,7 +12,7 @@ var letter_time = 0.03
 var space_time = 0.06
 var punctuation_time = 0.2
 
-signal finished_displaying()
+signal FinishedDisplayingLine()
 
 func displayText(textToDisplay: String):
 	text = textToDisplay
@@ -39,7 +39,7 @@ func displayLetter():
 	letter_index += 1
 	
 	if letter_index >= text.length():
-		finished_displaying.emit()
+		FinishedDisplayingLine.emit()
 		return
 		
 	match text[letter_index]:
